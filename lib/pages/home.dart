@@ -55,13 +55,11 @@ class _HomeState extends State<Home> {
     },
   ];
 
-
   // =========================
   // FILTER LOGIC
   // =========================
-   List<Map<String, dynamic>> get filteredProducts {
+  List<Map<String, dynamic>> get filteredProducts {
     List<Map<String, dynamic>> result = allProducts;
-
 
     // Category Filter
     if (selectedCategory != "All") {
@@ -93,54 +91,58 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // BACKGROUND
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 154, 194, 255),
-                  Color.fromARGB(255, 111, 108, 108),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Stack(
+          children: [
+            // BACKGROUND
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 154, 194, 255),
+                    Color.fromARGB(255, 111, 108, 108),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
-          ),
 
-          // CONTENT
-          SafeArea(
-            child: Column(
-              children: [
-                // =========================
-                // 🔥 FIXED SEARCH BAR
-                // =========================
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
-                  child: _buildSearchBar(context),
-                ),
+            // CONTENT
+            SafeArea(
+              child: Column(
+                children: [
+                  // =========================
+                  // 🔥 FIXED SEARCH BAR
+                  // =========================
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
+                    child: _buildSearchBar(context),
+                  ),
 
-                // =========================
-                // SCROLLABLE CONTENT
-                // =========================
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
-                      child: _buildContent(context),
+                  // =========================
+                  // SCROLLABLE CONTENT
+                  // =========================
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+                        child: _buildContent(context),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-Widget _buildSearchBar(BuildContext context) {
+  Widget _buildSearchBar(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -315,7 +317,6 @@ Widget _buildSearchBar(BuildContext context) {
               product["title"],
               product["price"],
               List<String>.from(product["options"] ?? []),
-
             );
           },
         ),
@@ -429,5 +430,4 @@ Widget _buildSearchBar(BuildContext context) {
       ),
     );
   }
-
 }
