@@ -11,6 +11,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String selectedCategory = "All";
+  bool isLoading = false; 
   String searchQuery = "";
   final TextEditingController searchController = TextEditingController();
 
@@ -153,13 +154,13 @@ class _HomeState extends State<Home> {
               child: Container(
                 padding: const EdgeInsets.only(left: 15),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: const Color.fromARGB(255, 240, 240, 240).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.25)),
+                  border: Border.all(color: const Color.fromARGB(255, 132, 132, 132).withOpacity(0.25)),
                 ),
                 child: TextField(
                   controller: searchController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color.fromARGB(255, 210, 199, 199)),
                   textInputAction: TextInputAction.search,
                   onSubmitted: (value) {
                     FocusScope.of(context).unfocus();
@@ -179,21 +180,42 @@ class _HomeState extends State<Home> {
         ),
         const SizedBox(width: 10),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
+            if (isLoading) return;
+
             FocusScope.of(context).unfocus();
+
+            setState(() {
+              isLoading = true;
+            });
+
+            // simulate loading (API / search delay)
+            await Future.delayed(const Duration(seconds: 1));
+
             setState(() {
               searchQuery = searchController.text.trim();
+              isLoading = false;
             });
           },
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.25),
+              color: const Color.fromARGB(255, 203, 203, 203).withOpacity(0.25),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.search, color: Colors.white),
+            child: isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Color.fromARGB(255, 2, 234, 250),
+                    ),
+                  )
+                : const Icon(Icons.search, color: Colors.white),
           ),
         ),
+
       ],
     );
   }
